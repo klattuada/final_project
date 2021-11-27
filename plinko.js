@@ -1,6 +1,6 @@
 var gravity = 0.06; // speed at which the ball drops  ideal speed = 0.06
 var pegs = []; //empty array for pegs
-var Balls = []; // empty array for Balls
+var balls = []; // empty array for balls
 var rows = 13; //number of rows *KEEP AT 13*
 
 
@@ -15,7 +15,7 @@ var Pegs = function(x,y){
 
 // prototype that draws the pegs
 Pegs.prototype.draw = function() {
-    ellipse(this.x,this.y,8,8);
+    ellipse(this.x,this.y,this.height,this.width);
 };
 
 // contructor function for the Ball
@@ -31,7 +31,7 @@ var Ball = function(x,y){
 
 //prototype that draws the Ball
 Ball.prototype.draw = function() {
-    ellipse(this.x,this.y,14,14);
+    ellipse(this.x,this.y,this.height,this.width);
 };
 
 
@@ -43,7 +43,12 @@ Ball.prototype.ballDrop = function(){
 
 
 //collision prototype *unfinished*
-Ball.prototype.collision = function(){
+Ball.prototype.collision = function(peg){
+    if ((peg.x >= this.x && peg.x <= (this.x + 10)) &&
+        (peg.y >= this.y && peg.y <= (this.y + 10))) {
+        //need bounce instead of thisvv
+        peg.y = -400;
+    }
 };
 
 //defines plinkoBall as a new ball    
@@ -54,10 +59,8 @@ var plinkoBall = new Ball(200,50);
 for (var i = 0; i < rows; i++){
     for(var j = 0; j < i; j++){
         pegs.push(new Pegs(-16*j+-10+32*i,-21*j+344));
-           
-        }
-        
     }
+}
     
 
 
@@ -66,15 +69,17 @@ draw = function() {
     fill(255, 255, 255);
     
     //for loop that actually displays the pegs
-    for (var k = 0; k < pegs.length; k++){
-        pegs[k].draw();
+    for (var p = 0; p < pegs.length; p++){
+        pegs[p].draw();
+        for (var b = 0; b < balls.length; b++){ balls[b].collision(pegs[p]);}
     }
     
     //for loop that draws the ball falling
-    for (var m = 0; m < Balls.length; m++){
-        Balls[m].ballDrop();
+    for (var b = 0; b < balls.length; b++){
+        //for (var p = 0; p < pegs.length; p++) {balls[b].collision(pegs[p]);}
+        balls[b].ballDrop();
         fill(255, 0, 0);
-        Balls[m].draw();
+        balls[b].draw();
     }
     
     //for loop for score boxes
@@ -87,7 +92,7 @@ draw = function() {
     
 
 };
-//when the mouse is clicked, push a new plinkoBall into the empty Balls array
+//when the mouse is clicked, push a new plinkoBall into the empty balls array
 mouseClicked = function(){
-        Balls.push(plinkoBall = new Ball(200,50));
+        balls.push(plinkoBall = new Ball(mouseX,50));
 };
