@@ -3,6 +3,8 @@ var pegs = []; //empty array for pegs
 var balls = []; // empty array for balls
 var rows = 13; //number of rows *KEEP AT 13*
 var slots = [];//array of slots
+var score = 10; // starting score for player
+var slotScores = ["x10","x3","x1.5","x1","x1.5","x3","x10"]; //slot scores
 
 // contructor function for the pegs
 var Pegs = function(x,y){
@@ -56,12 +58,7 @@ Ball.prototype.draw = function() {
 Ball.prototype.ballDrop = function(){
     if (this.isFalling) {
         this.velocity += gravity;
-        //stops ball from moving when it is at bootom of screen
-        if (this.y > 390) {
-            this.y = 385;
-            this.isFalling = false;
-        }
-        this.y += this.velocity;
+        this.y += this.velocity; 
         //prevents ball from going out of bounds
         if (this.x < 3) {
             this.direction = + random(1,3);
@@ -69,8 +66,14 @@ Ball.prototype.ballDrop = function(){
             this.direction = - random(1,3);
         }
         this.x += this.direction;
+        
     }
 };
+
+
+//defines plinkoBall as a new ball    
+var plinkoBall = new Ball(200,50);
+
 
 
 //pegCollision prototype
@@ -97,8 +100,7 @@ Ball.prototype.slotCollision = function(slot){
     }
 };
 
-//defines plinkoBall as a new ball    
-var plinkoBall = new Ball(200,50);
+
 
 
 //nested for loop that pushes new peg values into the empty array
@@ -112,12 +114,33 @@ for (var i = 0; i < rows; i++){
 for (var s = 0; s < 8; s++){
     fill(0, 0, 0);
     slots.push(new Slot(s));
-}
+} 
+
+
 
 draw = function() {
+    //static
     background(240, 228, 168);
+    fill(252, 0, 0);
+    textSize(35);
+    text("Money:" + " $" + score, 10,17,251,50);
+    noFill();
+    
+    
+    
+    //for loop that displays slot scores
+    for (var i = 0; i < 7; i++){
+        textSize(14);
+        text(slotScores[i],17+i*57,371);
+    }
+    
+  
+  
+  
     fill(255, 255, 255);
     
+  
+
     //for loop that actually displays the pegs
     for (var p = 0; p < pegs.length; p++){
         pegs[p].draw();
@@ -138,16 +161,39 @@ draw = function() {
         //checks when ball hits a slot at the bottom
         for (var s = 0; s < slots.length; s++) {
             balls[b].slotCollision(slots[s]);
-        }
+            }
+            
         balls[b].ballDrop();
         fill(255, 0, 0);
         balls[b].draw();
     }
-    
+    // if statements for the score
+    if (plinkoBall.x >= 40 && plinkoBall.x <= 130 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*3;
+    }
+    else if(plinkoBall.x >= 10 && plinkoBall.x <= 100 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*10;
+    }
+    else if(plinkoBall.x >= 130 && plinkoBall.x <= 170 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*1.5;
+    }
+    else if(plinkoBall.x >= 185 && plinkoBall.x <= 240 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*1;
+    }
+    else if(plinkoBall.x >= 250 && plinkoBall.x <= 300 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*1.5;
+    }
+    else if(plinkoBall.x >= 320 && plinkoBall.x <= 360 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*3;
+    }
+    else if(plinkoBall.x >= 365 && plinkoBall.x <= 400 && plinkoBall.y >= 396 && plinkoBall.y <=397){
+        score = score + 5*10;
+    }
     fill(255, 0, 0);
     
 };
 //when the mouse is clicked, push a new plinkoBall into the empty balls array
 mouseClicked = function(){
         balls.push(plinkoBall = new Ball(mouseX,50));
+        score = score - 5;
 };
