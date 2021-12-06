@@ -1,8 +1,42 @@
+//colorz
 var gravity = 0.06; // speed at which the ball drops  ideal speed = 0.06
 var pegs = []; //empty array for pegs
 var balls = []; // empty array for balls
 var rows = 13; //number of rows *KEEP AT 13*
 var slots = [];//array of slots
+var currentS = 1;
+var stillPlaying = true;
+//this gets changed
+var ballColor = color(207, 15, 27);
+
+//button class
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+Button.prototype.draw = function() {
+    fill(149, 255, 0);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
 
 // contructor function for the pegs
 var Pegs = function(x,y){
@@ -15,6 +49,8 @@ var Pegs = function(x,y){
 
 // prototype that draws the pegs
 Pegs.prototype.draw = function() {
+    //color
+    fill(255, 255, 255);
     ellipse(this.x,this.y,this.width,this.height);
 };
 
@@ -29,13 +65,14 @@ var Slot = function(position){
 
 // prototype that draws the pegs
 Slot.prototype.draw = function() {
+    fill(0, 0, 0);
     rect(this.x, this.y, this.width, this.height);
 };
 
 
 
 // contructor function for the Ball
-var Ball = function(x,y){
+var Ball = function(x,y,color){
     this.x = x;
     this.y = y;
     this.width = 14;
@@ -44,10 +81,13 @@ var Ball = function(x,y){
     this.isFalling = true;
     this.velocity = 0;
     this.direction = 0;
+    this.color = color;
+    //(30, 55, 166); //blue
 };
 
 //prototype that draws the Ball
 Ball.prototype.draw = function() {
+    fill(this.color);
     ellipse(this.x,this.y,this.width,this.height);
 };
 
@@ -98,7 +138,7 @@ Ball.prototype.slotCollision = function(slot){
 };
 
 //defines plinkoBall as a new ball    
-var plinkoBall = new Ball(200,50);
+//var plinkoBall = new Ball(200,50,ballColor);
 
 
 //nested for loop that pushes new peg values into the empty array
@@ -114,9 +154,11 @@ for (var s = 0; s < 8; s++){
     slots.push(new Slot(s));
 }
 
-draw = function() {
+
+var drawGame = function () {
     background(240, 228, 168);
-    fill(255, 255, 255);
+    //peg color
+    //fill(255, 255, 255);
     
     //for loop that actually displays the pegs
     for (var p = 0; p < pegs.length; p++){
@@ -125,9 +167,173 @@ draw = function() {
     
     //for loop for score boxes
     for ( var s = 0; s < slots.length; s++){
-        fill(0, 0, 0);
+        //fill(0, 0, 0);
         slots[s].draw();
     }
+};
+
+//changes ball color to red
+var redButton = new Button({
+    x: 25,
+    y: 25,
+    width: 100,
+    label: "Red",
+    onClick: function() {
+        ballColor = color(207, 15, 27);
+    }
+});
+
+//changes ball color to yellow
+var yellowButton = new Button({
+    x: 150,
+    y: 25,
+    width: 100,
+    label: "Yellow",
+    onClick: function() {
+        ballColor = color(255, 255, 0);
+    }
+});
+
+//changes ball color to blue
+var blueButton = new Button({
+    x: 275,
+    y: 25,
+    width: 100,
+    label: "Blue",
+    onClick: function() {
+        ballColor = color(37, 27, 171);
+    }
+});
+
+//changes ball color to black
+var blackButton = new Button({
+    x: 25,
+    y: 100,
+    width: 100,
+    label: "Black",
+    onClick: function() {
+        ballColor = color(0, 0, 0);
+    }
+});
+
+//changes ball color to green
+var greenButton = new Button({
+    x: 150,
+    y: 100,
+    width: 100,
+    label: "Green",
+    onClick: function() {
+        ballColor = color(24, 194, 35);
+    }
+});
+
+//changes ball color to white
+var whiteButton = new Button({
+    x: 275,
+    y: 100,
+    width: 100,
+    label: "White",
+    onClick: function() {
+        ballColor = color(255, 255, 255);
+    }
+});
+
+//changes ball color to purple
+var purpleButton = new Button({
+    x: 25,
+    y: 175,
+    width: 100,
+    label: "Purple",
+    onClick: function() {
+        ballColor = color(105, 13, 135);
+    }
+});
+
+//changes ball color to gold
+var goldButton = new Button({
+    x: 150,
+    y: 175,
+    width: 100,
+    label: "Gold",
+    onClick: function() {
+        ballColor = color(232, 219, 100);
+    }
+});
+
+//changes ball color to silver
+var silverButton = new Button({
+    x: 275,
+    y: 175,
+    width: 100,
+    label: "Silver",
+    onClick: function() {
+        ballColor = color(192, 196, 196);
+    }
+});
+
+//brings player to game screen
+var startButton = new Button({
+    x: 120,
+    y: 325,
+    width: 170,
+    label: "Play",
+    onClick: function() {
+        currentS = 3;
+        drawGame();
+    }
+});
+
+var drawColor = function () {
+    currentS = 2;
+    background(44, 222, 222);
+    yellowButton.draw();
+    redButton.draw();
+    blueButton.draw();
+    blackButton.draw();
+    greenButton.draw();
+    whiteButton.draw();
+    purpleButton.draw();
+    goldButton.draw();
+    silverButton.draw();
+    startButton.draw();
+};
+
+//button brings player to color choose screen
+var startColor = new Button({
+    x: 120,
+    y: 325,
+    width: 170,
+    label: "Play",
+    onClick: function() {
+        currentS = 2;
+        drawColor();
+    }
+});
+
+//start screen
+var drawHome = function () {
+    currentS = 1;
+    background(44, 222, 222);
+    fill(144, 50, 237);
+    textSize(85);
+    text("|-Plinko-|", 37, 5);
+    textSize(16);
+    text("|Try to get the most money!|", 2, 175); 
+    text("|Pay $5 to drop 1 ball, for a chance to win big!|", 5, 192);
+    textSize(20);
+    text("By_____", 110, 115);
+    startColor.draw();
+};
+
+draw = function() {
+    
+    if (currentS === 1) {
+        drawHome();
+    } else if (currentS ===2) {
+        drawColor();
+    }else if (stillPlaying) {
+        drawGame();
+    } 
     
     //for loop that draws the ball falling
     for (var b = 0; b < balls.length; b++){
@@ -140,14 +346,30 @@ draw = function() {
             balls[b].slotCollision(slots[s]);
         }
         balls[b].ballDrop();
-        fill(255, 0, 0);
+        //ball color
+        //fill(255, 0, 0);
         balls[b].draw();
     }
-    
+
     fill(255, 0, 0);
-    
+
 };
 //when the mouse is clicked, push a new plinkoBall into the empty balls array
 mouseClicked = function(){
-        balls.push(plinkoBall = new Ball(mouseX,50));
+        if (currentS === 1) {
+            startColor.handleMouseClick();    
+        } else if (currentS ===2) {
+            redButton.handleMouseClick();
+            yellowButton.handleMouseClick();
+            blueButton.handleMouseClick();
+            blackButton.handleMouseClick();
+            greenButton.handleMouseClick();
+            whiteButton.handleMouseClick();
+            purpleButton.handleMouseClick();
+            goldButton.handleMouseClick();
+            silverButton.handleMouseClick();
+            startButton.handleMouseClick();
+        }else {
+            balls.push(new Ball(mouseX,50,ballColor));        
+        }
 };
