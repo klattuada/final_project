@@ -115,8 +115,7 @@ Ball.prototype.ballDrop = function(){
 };
 
 
-//defines plinkoBall as a new ball    
-var plinkoBall = new Ball(200,50,ballColor);
+
 
 
 
@@ -200,32 +199,30 @@ var drawGame = function () {
         //ball color
         //fill(255, 0, 0);
         balls[b].draw();
+		
+			// if statements for the score
+		if (balls[b].x >= 40 && balls[b].x <= 130 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*3;
+		}
+		else if(balls[b].x >= 10 && balls[b].x <= 100 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*10;
+		}
+		else if(balls[b].x >= 130 && balls[b].x <= 170 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*1.5;
+		}
+		else if(balls[b].x >= 185 && balls[b].x <= 240 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*1;
+		}
+		else if(balls[b].x >= 250 && balls[b].x <= 300 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*1.5;
+		}
+		else if(balls[b].x >= 320 && balls[b].x <= 360 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*3;
+		}
+		else if(balls[b].x >= 365 && balls[b].x <= 400 && balls[b].y >= 396 && balls[b].y <=397){
+			score = score + 5*10;
+		}
     }
-
-    // if statements for the score
-    if (plinkoBall.x >= 40 && plinkoBall.x <= 130 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*3;
-    }
-    else if(plinkoBall.x >= 10 && plinkoBall.x <= 100 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*10;
-    }
-    else if(plinkoBall.x >= 130 && plinkoBall.x <= 170 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*1.5;
-    }
-    else if(plinkoBall.x >= 185 && plinkoBall.x <= 240 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*1;
-    }
-    else if(plinkoBall.x >= 250 && plinkoBall.x <= 300 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*1.5;
-    }
-    else if(plinkoBall.x >= 320 && plinkoBall.x <= 360 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*3;
-    }
-    else if(plinkoBall.x >= 365 && plinkoBall.x <= 400 && plinkoBall.y >= 396 && plinkoBall.y <=397){
-        score = score + 5*10;
-    }
-
-
 };
 
 
@@ -412,7 +409,7 @@ mouseClicked = function(){
             silverButton.handleMouseClick();
             startButton.handleMouseClick();
         }else {
-            balls.push(plinkoBall = new Ball(mouseX,50,ballColor));
+            balls.push(new Ball(mouseX,50,ballColor));
 			score = score - 5;			
         }
 };
