@@ -1,4 +1,4 @@
-//colorz
+//added colors 12/5
 var gravity = 0.06; // speed at which the ball drops  ideal speed = 0.06
 var pegs = []; //empty array for pegs
 var balls = []; // empty array for balls
