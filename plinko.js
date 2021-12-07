@@ -502,7 +502,7 @@ var drawHome = function () {
     text("|Try to get the most money!|", 2, 175); 
     text("|Pay $5 to drop 1 ball, for a chance to win big!|", 5, 192);
     textSize(20);
-    text("By_____", 110, 115);
+    text("By Peter Majdalani & Kevin Lattuada", 110, 115);
     drawBitmojiKevin(130,345,160);
     drawBitmojipeter(340,265,50);
     startColor.draw();
