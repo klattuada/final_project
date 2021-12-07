@@ -112,7 +112,6 @@ var drawHead = function(bitmojiX,bitmojiY,resize){
     line(resize/100*12+bitmojiX, resize/100*47+bitmojiY, resize/100*12+bitmojiX, resize/100*20+bitmojiY); // teeth #4
 };
 var drawBody = function(bitmojiX,bitmojiY,resize){
-    noStroke();
     fill(230, 7, 7); // color for shirt
     rect(resize/100*-85+bitmojiX,resize/100*78+bitmojiY,resize/100*174,resize/100*157,40); // shirt
 };
