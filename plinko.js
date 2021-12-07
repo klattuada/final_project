@@ -1,6 +1,8 @@
 //slight add to borders, prevent cheating
 
+
 //Lattuada Bitmoji
+
 var drawBitmojiHead = function(bitX,bitY,bitHeight) {
     
     //head
@@ -49,16 +51,18 @@ var drawBitmojiBody = function (bitX,bitY,bitHeight) {
 quad(bitX-(bitHeight/100*38),bitY-(bitHeight/100*27),bitX-(bitHeight/100*39),bitY-(bitHeight/100*3),bitX-(bitHeight/100*66),bitY-(bitHeight/100*5),bitX-(bitHeight/100*63),bitY-(bitHeight/100*26));
     fill(250, 250, 250);
     textSize((bitHeight/100*10));
+
     text("KL",bitX-(bitHeight/100*45),bitY-(bitHeight/50*10));
 
 };
 var drawBitmojiKevin = function(bitX,bitY,bitHeight) {
-    
     drawBitmojiHead(bitX,bitY,bitHeight);
     drawBitmojiBody(bitX,bitY,bitHeight);
 };
 
+
 //Majdalani Bitmoji
+
 var drawHead = function(bitmojiX,bitmojiY,resize){
     noStroke();
     fill(255, 219, 172); // skin tone for head
