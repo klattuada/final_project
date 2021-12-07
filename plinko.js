@@ -1,4 +1,4 @@
-//BITMOJI CHARACTERS
+//slight add to borders, prevent cheating
 var drawBitmojiHead = function(bitX,bitY,bitHeight) {
     
     //head
@@ -221,9 +221,9 @@ Ball.prototype.ballDrop = function(){
         this.velocity += gravity;
         this.y += this.velocity; 
         //prevents ball from going out of bounds
-        if (this.x < 3) {
+        if (this.x < 30) {
             this.direction = + random(1,3);
-        } else if (this.x > 397) {
+        } else if (this.x > 370) {
             this.direction = - random(1,3);
         }
         this.x += this.direction;
