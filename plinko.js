@@ -1,8 +1,6 @@
-//slight add to borders, prevent cheating
-
+//12/12 - score adjustment
 
 //Lattuada Bitmoji
-
 var drawBitmojiHead = function(bitX,bitY,bitHeight) {
     
     //head
@@ -60,9 +58,7 @@ var drawBitmojiKevin = function(bitX,bitY,bitHeight) {
     drawBitmojiBody(bitX,bitY,bitHeight);
 };
 
-
 //Majdalani Bitmoji
-
 var drawHead = function(bitmojiX,bitmojiY,resize){
     noStroke();
     fill(255, 219, 172); // skin tone for head
@@ -120,21 +116,17 @@ var drawBitmojipeter = function(bitmojiX,bitmojiY,resize){
     drawBody(bitmojiX,bitmojiY,resize);
 };
 
-
 //added colors 12/5
 var gravity = 0.06; // speed at which the ball drops  ideal speed = 0.06
 var pegs = []; //empty array for pegs
 var balls = []; // empty array for balls
 var rows = 13; //number of rows *KEEP AT 13*
 var slots = [];//array of slots
-
-var currentS = 1;
+var currentScene = 1;
 var stillPlaying = true;
-//this gets changed
-var ballColor = color(207, 15, 27);
+var ballColor = color(207, 15, 27);//this gets changed
 var score = 10; // starting score for player
 var slotScores = ["x10","x3","x1.5","x1","x1.5","x3","x10"]; //slot scores
-
 
 //button class
 var Button = function(config) {
@@ -164,8 +156,6 @@ Button.prototype.handleMouseClick = function() {
         this.onClick();
     }
 };
-
-
 
 // contructor function for the pegs
 var Pegs = function(x,y){
@@ -199,8 +189,6 @@ Slot.prototype.draw = function() {
     rect(this.x, this.y, this.width, this.height);
 };
 
-
-
 // contructor function for the Ball
 var Ball = function(x,y,color){
     this.x = x;
@@ -221,7 +209,6 @@ Ball.prototype.draw = function() {
     ellipse(this.x,this.y,this.width,this.height);
 };
 
-
 //prototype that makes the ball fall
 Ball.prototype.ballDrop = function(){
     if (this.isFalling) {
@@ -238,10 +225,32 @@ Ball.prototype.ballDrop = function(){
     }
 };
 
-
-
-
-
+//prototype checks balls final x position to give points
+Ball.prototype.checkScore = function () {
+    if (this.y >= 396 && this.y <=397){
+        if(this.x >= 8 && this.x <= 55){
+            score = score + 5*10;
+        }
+        else if (this.x >= 64 && this.x <= 111){
+            score = score + 5*3;
+        }
+        else if(this.x >= 120 && this.x <= 167){
+            score = score + 5*1.5;
+        }
+        else if(this.x >= 176 && this.x <= 223){
+            score = score + 5*1;
+        }
+        else if(this.x >= 232 && this.x <= 279){
+            score = score + 5*1.5;
+        }
+        else if(this.x >= 288 && this.x <= 335){
+            score = score + 5*3;
+        }
+        else if(this.x >= 344 && this.x <= 391){
+            score = score + 5*10;
+        }
+    }
+};
 
 //pegCollision prototype
 Ball.prototype.pegCollision = function(peg){
@@ -267,7 +276,6 @@ Ball.prototype.slotCollision = function(slot){
     }
 };
 
-
 //nested for loop that pushes new peg values into the empty array
 for (var i = 0; i < rows; i++){
     for(var j = 0; j < i; j++){
@@ -281,7 +289,7 @@ for (var s = 0; s < 8; s++){
     slots.push(new Slot(s));
 } 
 
-//******
+//function draws the game & controls gameplay
 var drawGame = function () {
     background(240, 228, 168);
     fill(252, 0, 0);
@@ -293,10 +301,6 @@ var drawGame = function () {
         textSize(14);
         text(slotScores[i],17+i*57,371);
     }
-	
-    fill(255, 255, 255);
-  
-
     //for loop that actually displays the pegs
     for (var p = 0; p < pegs.length; p++){
         pegs[p].draw();
@@ -317,35 +321,11 @@ var drawGame = function () {
         //checks when ball hits a slot at the bottom
         for (var s = 0; s < slots.length; s++) {
             balls[b].slotCollision(slots[s]);
-            }
-            
+        }
+        //drops ball, displays the balls falling, and checks score
         balls[b].ballDrop();
-        //ball color
-        //fill(255, 0, 0);
         balls[b].draw();
-		
-			// if statements for the score
-		if (balls[b].x >= 40 && balls[b].x <= 130 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*3;
-		}
-		else if(balls[b].x >= 10 && balls[b].x <= 100 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*10;
-		}
-		else if(balls[b].x >= 130 && balls[b].x <= 170 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*1.5;
-		}
-		else if(balls[b].x >= 185 && balls[b].x <= 240 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*1;
-		}
-		else if(balls[b].x >= 250 && balls[b].x <= 300 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*1.5;
-		}
-		else if(balls[b].x >= 320 && balls[b].x <= 360 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*3;
-		}
-		else if(balls[b].x >= 365 && balls[b].x <= 400 && balls[b].y >= 396 && balls[b].y <=397){
-			score = score + 5*10;
-		}
+        balls[b].checkScore();
     }
 };
 
@@ -454,16 +434,17 @@ var silverButton = new Button({
 var startButton = new Button({
     x: 120,
     y: 325,
-    width: 170,
+    width: 150,
     label: "Play",
     onClick: function() {
-        currentS = 3;
+        currentScene = 3;
         drawGame();
     }
 });
 
+//ball color selection screen
 var drawColor = function () {
-    currentS = 2;
+    currentScene = 2;
     background(44, 222, 222);
     yellowButton.draw();
     redButton.draw();
@@ -475,67 +456,67 @@ var drawColor = function () {
     goldButton.draw();
     silverButton.draw();
     startButton.draw();
+    fill(ballColor);
+    ellipse(200,275,75,75);
 };
 
 //button brings player to color choose screen
 var startColor = new Button({
     x: 120,
     y: 325,
-    width: 170,
-    label: "Play",
+    width: 150,
+    label: "Select Color",
     onClick: function() {
-        currentS = 2;
+        currentScene = 2;
         drawColor();
     }
 });
 
-
 //start screen
 var drawHome = function () {
-    currentS = 1;
+    currentScene = 1;
     background(44, 222, 222);
     fill(144, 50, 237);
     textSize(85);
     text("|-Plinko-|", 37, 5);
     textSize(16);
-    text("|Try to get the most money!|", 2, 175); 
-    text("|Pay $5 to drop 1 ball, for a chance to win big!|", 5, 192);
+    text("|Try to get the most money!|", 100, 175); 
+    text("|Pay $5 to drop 1 ball, for a chance to win big!|", 37, 192);
     textSize(20);
     text("By Peter Majdalani & Kevin Lattuada", 40, 115);
-    drawBitmojiKevin(130,345,160);
-    drawBitmojipeter(340,265,50);
+    drawBitmojipeter(55,265,50);
+    drawBitmojiKevin(400,345,160);
     startColor.draw();
 };
 
-
+// switches between scene based on scene number
 draw = function() {
-    if (currentS === 1) {
+    if (currentScene === 1) {
         drawHome();
-    } else if (currentS ===2) {
+    } else if (currentScene ===2) {
         drawColor();
     }else if (stillPlaying) {
         drawGame();
     } 
 };    
 
-
-//when the mouse is clicked, push a new plinkoBall into the empty balls array
+//handles all mouse click events
 mouseClicked = function(){
-        if (currentS === 1) {
-            startColor.handleMouseClick();    
-        } else if (currentS ===2) {
-            redButton.handleMouseClick();
-            yellowButton.handleMouseClick();
-            blueButton.handleMouseClick();
-            blackButton.handleMouseClick();
-            greenButton.handleMouseClick();
-            whiteButton.handleMouseClick();
-            purpleButton.handleMouseClick();
-            goldButton.handleMouseClick();
-            silverButton.handleMouseClick();
-            startButton.handleMouseClick();
-        }else {
-            balls.push(new Ball(mouseX,50,ballColor));
-			score = score - 5;			
-        }
+    if (currentScene === 1) {
+        startColor.handleMouseClick();    
+    } else if (currentScene === 2) {
+        redButton.handleMouseClick();
+        yellowButton.handleMouseClick();
+        blueButton.handleMouseClick();
+        blackButton.handleMouseClick();
+        greenButton.handleMouseClick();
+        whiteButton.handleMouseClick();
+        purpleButton.handleMouseClick();
+        goldButton.handleMouseClick();
+        silverButton.handleMouseClick();
+        startButton.handleMouseClick();
+    } else if (currentScene === 3) {
+        balls.push(new Ball(mouseX,50,ballColor));
+		score = score - 5;			
+    }
 };
