@@ -1,4 +1,4 @@
-//12/12 - score adjustment
+//12/17 - Final Commit
 
 //Lattuada Bitmoji
 var drawBitmojiHead = function(bitX,bitY,bitHeight) {
@@ -116,8 +116,8 @@ var drawBitmojipeter = function(bitmojiX,bitmojiY,resize){
     drawBody(bitmojiX,bitmojiY,resize);
 };
 
-//added colors 12/5
-var gravity = 0.06; // speed at which the ball drops  ideal speed = 0.06
+//variables
+var gravity = 0.06; // speed at which the ball drops ideal speed = 0.06
 var pegs = []; //empty array for pegs
 var balls = []; // empty array for balls
 var rows = 13; //number of rows *KEEP AT 13*
@@ -173,17 +173,18 @@ Pegs.prototype.draw = function() {
     ellipse(this.x,this.y,this.width,this.height);
 };
 
-//Slot constuctor function
+//  slot constuctor function
 var Slot = function(position){
     this.position = position;
     this.x = 56*position;
+    this.center = this.x + 3.5; //center of slot
     this.y = 375;
     this.height = 36;
     this.width = 7;
     this.radi = this.height/2;
 };
 
-// prototype that draws the pegs
+// prototype that draws the slots at bottom
 Slot.prototype.draw = function() {
     fill(0, 0, 0);
     rect(this.x, this.y, this.width, this.height);
@@ -200,7 +201,6 @@ var Ball = function(x,y,color){
     this.velocity = 0;
     this.direction = 0;
     this.color = color;
-    //(30, 55, 166); //blue
 };
 
 //prototype that draws the Ball
@@ -212,6 +212,7 @@ Ball.prototype.draw = function() {
 //prototype that makes the ball fall
 Ball.prototype.ballDrop = function(){
     if (this.isFalling) {
+        //continues to drop ball
         this.velocity += gravity;
         this.y += this.velocity; 
         //prevents ball from going out of bounds
@@ -227,26 +228,28 @@ Ball.prototype.ballDrop = function(){
 
 //prototype checks balls final x position to give points
 Ball.prototype.checkScore = function () {
-    if (this.y >= 396 && this.y <=397){
-        if(this.x >= 8 && this.x <= 55){
+    if (this.y >= 390 && this.y <= 400){
+        this.y = 401;
+        //checks ball coordinates at bottom of screen
+        if(this.x >= 0 && this.x <= 59){
             score = score + 5*10;
         }
-        else if (this.x >= 64 && this.x <= 111){
+        else if (this.x >= 60 && this.x <= 115){
             score = score + 5*3;
         }
-        else if(this.x >= 120 && this.x <= 167){
+        else if(this.x >= 115 && this.x <= 171){
             score = score + 5*1.5;
         }
-        else if(this.x >= 176 && this.x <= 223){
+        else if(this.x >= 172 && this.x <= 227){
             score = score + 5*1;
         }
-        else if(this.x >= 232 && this.x <= 279){
+        else if(this.x >= 228 && this.x <= 283){
             score = score + 5*1.5;
         }
-        else if(this.x >= 288 && this.x <= 335){
+        else if(this.x >= 284 && this.x <= 400){
             score = score + 5*3;
         }
-        else if(this.x >= 344 && this.x <= 391){
+        else if(this.x >= 343 && this.x <= 393){
             score = score + 5*10;
         }
     }
@@ -256,6 +259,7 @@ Ball.prototype.checkScore = function () {
 Ball.prototype.pegCollision = function(peg){
     if ((peg.x >= (this.x - 10) && peg.x <= (this.x + 10)) &&
         (peg.y >= (this.y - 10) && peg.y <= (this.y + 10))) {
+        //moves ball either to left or right
         if(this.x < peg.x) {
             this.direction = -random(1,3);
         }else {
@@ -266,9 +270,10 @@ Ball.prototype.pegCollision = function(peg){
 
 //slotCollision prototype 
 Ball.prototype.slotCollision = function(slot){
-    if ((slot.x >= (this.x - 5) && slot.x <= (this.x + 5)) &&
-        (slot.y >= (this.y - 5) && slot.y <= (this.y + 5))) {
-        if(this.x < slot.x) {
+    if ((slot.center >= (this.x - 10)) && (slot.center <= (this.x + 10)) && 
+        (slot.y <= (this.y + 10))) {
+        //moves ball either to left or right
+        if(this.x < slot.center) {
             this.direction = -random(2,4);
         }else {
             this.direction = random(2,4);
@@ -328,8 +333,6 @@ var drawGame = function () {
         balls[b].checkScore();
     }
 };
-
-
 
 //changes ball color to red
 var redButton = new Button({
